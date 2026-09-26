@@ -3,5 +3,5 @@
 
 [[plugin]]
 name = "wordcount"
-source = "q0tzly/nib-plugin-example"
+source = "nib-editor/plugin-example"
 description = "Shows the buffer's word count in the status line (an example in Go)"
