@@ -1,0 +1,32 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check plugins.toml
+        shell: python
+        run: |
+          import re, sys, tomllib
+          plugins = tomllib.load(open("plugins.toml", "rb")).get("plugin", [])
+          problems = []
+          for p in plugins:
+              missing = {"name", "source", "description"} - p.keys()
+              extra = p.keys() - {"name", "source", "description"}
+              if missing or extra:
+                  problems.append(f"{p}: missing {sorted(missing)}, unknown {sorted(extra)}")
+              elif not re.fullmatch(r"[a-z0-9-]+", p["name"]):
+                  problems.append(f"{p['name']}: names are lowercase letters, digits, and -")
+          names = [p.get("name", "") for p in plugins]
+          if len(set(names)) != len(names):
+              problems.append("a name is listed twice")
+          if names != sorted(names):
+              problems.append("keep the plugins in order by name")
+          for problem in problems:
+              print(f"::error file=plugins.toml::{problem}")
+          sys.exit(1 if problems else 0)

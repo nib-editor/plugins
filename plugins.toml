@@ -1,0 +1,7 @@
+# Plugins that `nib plugin search` finds and `nib plugin add NAME` installs.
+# Keep them in order by name. See README.md for how to add one.
+
+[[plugin]]
+name = "wordcount"
+source = "q0tzly/nib-plugin-example"
+description = "Shows the buffer's word count in the status line (an example in Go)"
